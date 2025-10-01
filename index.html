@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sovereign Core</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Times New Roman", Times, serif;
+                line-height: 1.4;
+                color: #000;
+                background: #fff;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 0 40px;
+            }
+
+            /* Header */
+            header {
+                padding: 60px 0 40px 0;
+                border-bottom: 1px solid #000;
+                position: relative;
+            }
+
+            .header-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .logo {
+                font-size: 18px;
+                font-weight: normal;
+                color: #000;
+                text-decoration: none;
+                letter-spacing: 1px;
+            }
+
+            .menu-toggle {
+                width: 30px;
+                height: 20px;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .menu-toggle span {
+                display: block;
+                width: 100%;
+                height: 1px;
+                background: #000;
+                margin-bottom: 6px;
+                transition: all 0.3s ease;
+            }
+
+            .menu-toggle span:last-child {
+                margin-bottom: 0;
+            }
+
+            /* Menu overlay */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.98);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .menu-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+
+            .menu-close {
+                position: absolute;
+                top: 60px;
+                right: 40px;
+                width: 30px;
+                height: 20px;
+                cursor: pointer;
+            }
+
+            .menu-close span {
+                display: block;
+                width: 100%;
+                height: 1px;
+                background: #000;
+                position: absolute;
+                top: 50%;
+                transform-origin: center;
+            }
+
+            .menu-close span:first-child {
+                transform: rotate(45deg);
+            }
+
+            .menu-close span:last-child {
+                transform: rotate(-45deg);
+            }
+
+            .menu-nav {
+                list-style: none;
+            }
+
+            .menu-nav li {
+                margin-bottom: 30px;
+            }
+
+            .menu-nav a {
+                font-size: 24px;
+                font-weight: normal;
+                color: #000;
+                text-decoration: none;
+                letter-spacing: 1px;
+                transition: opacity 0.2s ease;
+            }
+
+            .menu-nav a:hover {
+                opacity: 0.6;
+            }
+
+            /* Hero */
+            .hero {
+                padding: 120px 0;
+                text-align: left;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+                font-weight: normal;
+                line-height: 1.2;
+                margin-bottom: 80px;
+                max-width: 700px;
+                text-align: left;
+            }
+
+            .hero-text {
+                font-family: "Courier New", monospace;
+                font-size: 14px;
+                line-height: 1.8;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                max-width: 600px;
+            }
+
+            .hero-text p {
+                margin-bottom: 30px;
+            }
+
+            /* Technical Stack */
+            .stack {
+                padding: 120px 0;
+                border-top: 1px solid #000;
+            }
+
+            .stack h2 {
+                font-size: 28px;
+                font-weight: normal;
+                margin-bottom: 60px;
+                line-height: 1.3;
+            }
+
+            .stack-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 60px;
+            }
+
+            .stack-item {
+                text-align: center;
+            }
+
+            .stack-icon {
+                width: 80px;
+                height: 80px;
+                margin: 0 auto 30px auto;
+                border: 2px solid #000;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            .stack-item h3 {
+                font-size: 18px;
+                font-weight: normal;
+                margin-bottom: 15px;
+                line-height: 1.3;
+            }
+
+            .stack-item p {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                line-height: 1.6;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                color: #666;
+            }
+
+            /* Mission Section */
+            .mission {
+                padding: 120px 0;
+                border-top: 1px solid #000;
+            }
+
+            .mission h2 {
+                font-size: 28px;
+                font-weight: normal;
+                margin-bottom: 60px;
+                line-height: 1.3;
+            }
+
+            .mission-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 80px;
+            }
+
+            .mission-text {
+                font-family: "Courier New", monospace;
+                font-size: 14px;
+                line-height: 1.8;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            .mission-text p {
+                margin-bottom: 30px;
+            }
+
+            .principles {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                line-height: 1.8;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            .principle-item {
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .principle-item:last-child {
+                border-bottom: none;
+            }
+
+            .principle-item h3 {
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+                font-weight: normal;
+                margin-bottom: 8px;
+                text-transform: none;
+            }
+
+            /* Team Section */
+            .team {
+                padding: 120px 0;
+                border-top: 1px solid #000;
+            }
+
+            .team h2 {
+                font-size: 28px;
+                font-weight: normal;
+                margin-bottom: 80px;
+                line-height: 1.3;
+            }
+
+            .team-member {
+                margin-bottom: 60px;
+                padding-bottom: 40px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .team-member:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+
+            .team-member h3 {
+                font-size: 18px;
+                font-weight: normal;
+                margin-bottom: 5px;
+            }
+
+            .team-member .role {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                margin-bottom: 15px;
+            }
+
+            .team-member .description {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                line-height: 1.8;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                color: #666;
+            }
+
+            .link-placeholder {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                color: #ccc;
+                margin-top: 10px;
+            }
+
+            /* Demo Section */
+            .demo {
+                padding: 80px 0;
+                border-top: 1px solid #000;
+                background: #f9f9f9;
+                text-align: center;
+            }
+
+            .demo h2 {
+                font-size: 24px;
+                font-weight: normal;
+                margin-bottom: 30px;
+            }
+
+            .demo p {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                color: #666;
+                margin-bottom: 40px;
+            }
+
+            .demo-link {
+                display: inline-block;
+                padding: 15px 30px;
+                border: 1px solid #000;
+                color: #000;
+                text-decoration: none;
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                transition: all 0.2s ease;
+            }
+
+            .demo-link:hover {
+                background: #000;
+                color: #fff;
+            }
+
+            /* Building Towards Section */
+            .building-towards {
+                padding: 120px 0;
+                border-top: 1px solid #000;
+            }
+
+            .building-towards h2 {
+                font-size: 28px;
+                font-weight: normal;
+                margin-bottom: 80px;
+                line-height: 1.3;
+            }
+
+            .target-item {
+                margin-bottom: 40px;
+                padding-bottom: 30px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .target-item:last-child {
+                border-bottom: none;
+            }
+
+            .target-item h3 {
+                font-size: 16px;
+                font-weight: normal;
+                margin-bottom: 5px;
+            }
+
+            .target-item .type {
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                color: #666;
+            }
+
+            /* Collaborate Section */
+            .collaborate {
+                padding: 120px 0;
+                border-top: 1px solid #000;
+                background: #f9f9f9;
+            }
+
+            .collaborate h2 {
+                font-size: 28px;
+                font-weight: normal;
+                margin-bottom: 80px;
+                line-height: 1.3;
+            }
+
+            .collaborate-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 80px;
+            }
+
+            .collaborate-text {
+                font-family: "Courier New", monospace;
+                font-size: 14px;
+                line-height: 1.8;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            .collaborate-text p {
+                margin-bottom: 30px;
+            }
+
+            .action-item {
+                margin-bottom: 40px;
+                padding-bottom: 30px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .action-item:last-child {
+                border-bottom: none;
+            }
+
+            .action-item h3 {
+                font-size: 16px;
+                font-weight: normal;
+                margin-bottom: 10px;
+            }
+
+            .contact-button {
+                display: inline-block;
+                padding: 12px 24px;
+                border: 1px solid #000;
+                color: #000;
+                text-decoration: none;
+                font-family: "Courier New", monospace;
+                font-size: 11px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                transition: all 0.2s ease;
+                margin-top: 10px;
+            }
+
+            .contact-button:hover {
+                background: #000;
+                color: #fff;
+            }
+
+            /* Responsive hero title handling */
+            @media (max-width: 1200px) {
+                .hero h1 {
+                    font-size: 38px;
+                }
+            }
+
+            @media (max-width: 900px) {
+                .hero h1 {
+                    font-size: 32px;
+                    line-height: 1.1;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .hero h1 {
+                    font-size: 28px;
+                }
+            }
+
+            @media (max-width: 500px) {
+                .hero h1 {
+                    font-size: 24px;
+                    line-height: 1.2;
+                }
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .container {
+                    padding: 0 20px;
+                }
+
+                .hero {
+                    padding: 80px 0;
+                }
+
+                .mission-content,
+                .stack-grid {
+                    grid-template-columns: 1fr;
+                    gap: 40px;
+                }
+
+                .collaborate-content {
+                    grid-template-columns: 1fr;
+                    gap: 40px;
+                }
+
+                .stack,
+                .mission,
+                .team,
+                .building-towards,
+                .collaborate {
+                    padding: 80px 0;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">SOVEREIGN CORE</a>
+                    <div class="menu-toggle" onclick="toggleMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="menu-overlay" id="menuOverlay">
+            <div class="menu-close" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+            </div>
+            <div class="menu-content">
+                <ul class="menu-nav">
+                    <li>
+                        <a href="#stack" onclick="closeMenu()">ARCHITECTURE</a>
+                    </li>
+                    <li>
+                        <a href="#mission" onclick="closeMenu()">MISSION</a>
+                    </li>
+                    <li><a href="#team" onclick="closeMenu()">TEAM</a></li>
+                    <li><a href="#demo" onclick="closeMenu()">DEMO</a></li>
+                    <li>
+                        <a href="#building-towards" onclick="closeMenu()"
+                            >BUILDING TOWARDS</a
+                        >
+                    </li>
+                    <li>
+                        <a href="#collaborate" onclick="closeMenu()"
+                            >COLLABORATE</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <section class="hero">
+            <div class="container">
+                <h1>Infrastructure for Self-Sovereign Digital Territories</h1>
+                <div class="hero-text">
+                    <p>
+                        WE ARE BUILDING THE FRAMEWORKS THAT ENABLE NETWORK
+                        STATES AND HIGH TRUST SOCIETIES TO TAKE CONTROL OF THEIR
+                        DIGITAL TERRITORIES.
+                    </p>
+                    <p>
+                        EMPOWERING THE NETWORK, SMALLER GROUPS WITHIN THE
+                        NETWORK, AND INDIVIDUALS TO OWN AND CONTROL ACCESS TO
+                        THEIR DIGITAL ASSETS.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stack" id="stack">
+            <div class="container">
+                <h2>Complete Sovereignty Infrastructure</h2>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-icon">ID</div>
+                        <h3>Identity Sovereignty</h3>
+                        <p>
+                            NON-CUSTODIAL VERIFIABLE CREDENTIALS WITH SELECTIVE
+                            DISCLOSURE
+                        </p>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-icon">AUTH</div>
+                        <h3>Permission Sovereignty</h3>
+                        <p>
+                            CRYPTOGRAPHIC DELEGATION AND CAPABILITY-BASED ACCESS
+                            CONTROL
+                        </p>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-icon">VERIFY</div>
+                        <h3>Verification Sovereignty</h3>
+                        <p>
+                            HASH-CHAIN PROVENANCE AND CRYPTOGRAPHIC AUDIT TRAILS
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mission" id="mission">
+            <div class="container">
+                <h2>Architecture for Digital Sovereignty</h2>
+                <div class="mission-content">
+                    <div class="mission-text">
+                        <p>
+                            DATA SOVEREIGNTY IS FUNDAMENTAL TO HUMAN FREEDOM IN
+                            THE DIGITAL AGE.
+                        </p>
+                        <p>
+                            WE ARE BUILDING LIGHTWEIGHT, SCALABLE PROTOCOLS THAT
+                            MAKE TRUE DIGITAL SOVEREIGNTY POSSIBLE FOR
+                            INDIVIDUALS AND COMMUNITIES.
+                        </p>
+                        <p>
+                            OUR INFRASTRUCTURE ENABLES CRYPTOGRAPHIC GOVERNANCE
+                            WITHOUT INSTITUTIONAL GATEKEEPERS.
+                        </p>
+                    </div>
+                    <div class="principles">
+                        <div class="principle-item">
+                            <h3>Non-Custodial by Design</h3>
+                            <p>YOU CONTROL THE KEYS, YOU CONTROL THE SYSTEM</p>
+                        </div>
+                        <div class="principle-item">
+                            <h3>Cryptographic Proofs Over Trust</h3>
+                            <p>
+                                MATHEMATICAL VERIFICATION, NOT INSTITUTIONAL
+                                PROMISES
+                            </p>
+                        </div>
+                        <div class="principle-item">
+                            <h3>Privacy-First Architecture</h3>
+                            <p>
+                                SELECTIVE DISCLOSURE AND ZERO-KNOWLEDGE BY
+                                DEFAULT
+                            </p>
+                        </div>
+                        <div class="principle-item">
+                            <h3>Portable and Interoperable</h3>
+                            <p>YOUR DATA WORKS EVERYWHERE, CONTROLLED BY YOU</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="team" id="team">
+            <div class="container">
+                <h2>Core Collaborators</h2>
+
+                <div class="team-member">
+                    <h3>TIM BANSEMER</h3>
+                    <div class="role">FOUNDER & CEO</div>
+                    <div class="description">
+                        AQUA PROTOCOL (INBLOCK.IO) | CRYPTOGRAPHIC TRUST
+                        PROTOCOLS & HASH-CHAIN VERIFICATION
+                    </div>
+                    <div class="link-placeholder">LINK</div>
+                </div>
+
+                <div class="team-member">
+                    <h3>SAM GBAFA</h3>
+                    <div class="role">CEO</div>
+                    <div class="description">
+                        TINYCLOUD | PERMISSION SYSTEMS & CAPABILITY-BASED ACCESS
+                        CONTROL | FORMER SPRUCEID
+                    </div>
+                    <div class="link-placeholder">LINK</div>
+                </div>
+
+                <div class="team-member">
+                    <h3>CHARLES CUNNINGHAM</h3>
+                    <div class="role">PRINCIPAL PROTOCOL ENGINEER</div>
+                    <div class="description">
+                        TINYCLOUD | DECENTRALIZED IDENTITY & CRYPTOGRAPHIC
+                        SYSTEMS | FORMER SPRUCEID
+                    </div>
+                    <div class="link-placeholder">LINK</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo" id="demo">
+            <div class="container">
+                <h2>See It Working</h2>
+                <p>
+                    OPENCREDENTIALS: NON-CUSTODIAL VERIFIABLE CREDENTIALS IN
+                    PRACTICE
+                </p>
+                <a
+                    href="https://credentials.tinycloud.xyz"
+                    class="demo-link"
+                    target="_blank"
+                    >VIEW DEMO</a
+                >
+            </div>
+        </section>
+
+        <section class="building-towards" id="building-towards">
+            <div class="container">
+                <h2>Building Towards</h2>
+
+                <div class="target-item">
+                    <h3>NETWORK STATES</h3>
+                    <div class="type">
+                        SOVEREIGN DIGITAL TERRITORIES WITH CRYPTOGRAPHIC
+                        GOVERNANCE
+                    </div>
+                </div>
+
+                <div class="target-item">
+                    <h3>HIGH TRUST SOCIETIES</h3>
+                    <div class="type">
+                        COMMUNITY-CONTROLLED DATA POOLS AND IDENTITY SYSTEMS
+                    </div>
+                </div>
+
+                <div class="target-item">
+                    <h3>NON-CUSTODIAL CREDENTIAL SYSTEMS</h3>
+                    <div class="type">
+                        IDENTITY SOVEREIGNTY WITHOUT INSTITUTIONAL GATEKEEPERS
+                    </div>
+                </div>
+
+                <div class="target-item">
+                    <h3>CRYPTOGRAPHIC GOVERNANCE FRAMEWORKS</h3>
+                    <div class="type">
+                        MATHEMATICAL VERIFICATION FOR ORGANIZATIONAL TRUST
+                    </div>
+                </div>
+
+                <div class="target-item">
+                    <h3>SELF-SOVEREIGN STORAGE NETWORKS</h3>
+                    <div class="type">
+                        USER-CONTROLLED DATA INFRASTRUCTURE WITH DELEGATED
+                        ACCESS
+                    </div>
+                </div>
+
+                <div class="target-item">
+                    <h3>TRUSTLESS ZERO-KNOWLEDGE DATA MARKETPLACES</h3>
+                    <div class="type">
+                        FOR AI AGENTS, NETWORKS, AND INDIVIDUALS
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="collaborate" id="collaborate">
+            <div class="container">
+                <h2>Join the Collaboration</h2>
+
+                <div class="collaborate-content">
+                    <div class="collaborate-text">
+                        <p>
+                            WE ARE BUILDING THE FOUNDATIONAL INFRASTRUCTURE FOR
+                            DIGITAL SOVEREIGNTY.
+                        </p>
+                        <p>
+                            IF YOU ARE WORKING ON NETWORK STATES, HIGH TRUST
+                            COMMUNITIES, OR SOVEREIGNTY-FOCUSED PROTOCOLS, LET'S
+                            COLLABORATE.
+                        </p>
+                    </div>
+
+                    <div class="collaborate-actions">
+                        <div class="action-item">
+                            <h3>BUILDERS & PROTOCOL DEVELOPERS</h3>
+                            <a
+                                href="mailto:technical@sovereigncore.org"
+                                class="contact-button"
+                                >GET IN TOUCH</a
+                            >
+                        </div>
+
+                        <div class="action-item">
+                            <h3>NETWORK STATES & COMMUNITIES</h3>
+                            <a
+                                href="mailto:partnerships@sovereigncore.org"
+                                class="contact-button"
+                                >START PARTNERSHIP</a
+                            >
+                        </div>
+
+                        <div class="action-item">
+                            <h3>RESEARCHERS & ACADEMICS</h3>
+                            <a
+                                href="mailto:research@sovereigncore.org"
+                                class="contact-button"
+                                >COLLABORATE</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            function toggleMenu() {
+                const overlay = document.getElementById("menuOverlay");
+                overlay.classList.toggle("active");
+            }
+
+            function closeMenu() {
+                const overlay = document.getElementById("menuOverlay");
+                overlay.classList.remove("active");
+            }
+
+            // Smooth scrolling for navigation links
+            document.addEventListener("DOMContentLoaded", function () {
+                const links = document.querySelectorAll('a[href^="#"]');
+                links.forEach((link) => {
+                    link.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute("href");
+                        if (targetId === "#") return;
+
+                        const targetSection = document.querySelector(targetId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start",
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
